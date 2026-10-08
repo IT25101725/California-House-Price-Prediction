@@ -53,16 +53,38 @@ print("y_test:", y_test.shape)
 
 # Model 1 — Linear Regression
 
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Ridge
+from sklearn.model_selection import GridSearchCV
 
-linear_model = LinearRegression()
 
-linear_model.fit(
+ridge_model = Ridge()
+
+param_grid = {
+    "alpha": [0.001, 0.01, 0.1, 1.0, 10.0, 100.0, 1000.0]
+}
+
+# Set up GridSearchCV with 5-fold cross-validation
+grid_search = GridSearchCV(
+    estimator=ridge_model,
+    param_grid=param_grid,
+    cv=5,
+    scoring="neg_mean_squared_error",
+    n_jobs=-1
+)
+
+
+grid_search.fit(
     X_train,
     y_train
 )
 
-print("Linear Regression trained successfully!")
+
+best_alpha = grid_search.best_params_["alpha"]
+best_ridge_model = grid_search.best_estimator_
+
+print("Best Hyperparameter (alpha):", best_alpha)
+print("Best Score (Neg MSE):", grid_search.best_score_)
+print("Ridge Regression tuned and trained successfully!")
 
 # Predictions
 linear_predictions = linear_model.predict(
