@@ -87,7 +87,7 @@ print("Best Score (Neg MSE):", grid_search.best_score_)
 print("Ridge Regression tuned and trained successfully!")
 
 # Predictions
-linear_predictions = linear_model.predict(
+linear_predictions = best_ridge_model.predict(
     X_test
 )
 
